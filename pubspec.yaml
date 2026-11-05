@@ -1,0 +1,20 @@
+name: battle_backend
+description: The logic of the Battle Team functions around battles (wars, battles, sections, guilds, API keys), over Appwrite tables.
+version: 0.1.0+1
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  battle_protocol: ^0.1.0
+  battle_rules: ^0.1.0
+  crypto: ^3.0.7
+  dart_appwrite: ^31.1.0
+  hawkbee_schema: ^0.1.0
+
+dev_dependencies:
+  mocktail: ^1.0.5
+  test: ^1.31.0
+  very_good_analysis: ^11.0.0
