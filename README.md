@@ -12,7 +12,7 @@ persistent, real-time team battle game (stack decision 8): each function of hawk
 - `Guilds`: guild requests between battles.
 - `ApiKeys`: one key per account, shown once, stored hashed, revoked at once.
 - `Rows`, the port of the Hawkbee database's tables, with `MemoryRows` and `AppwriteRows`;
-  `Admins`, from the Appwrite label `admin`; `serve`, the answer of a function's execution.
+  `Admins`, from the Appwrite label `btadmin`; `serve`, the answer of a function's execution.
 
 The rules come from [battle_rules](https://github.com/hawkbee1/battle_rules), the rows and IDs
 from hawkbee's `hawkbee_schema`.

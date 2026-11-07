@@ -1,6 +1,7 @@
 import 'package:battle_backend/battle_backend.dart';
 import 'package:dart_appwrite/dart_appwrite.dart';
 import 'package:dart_appwrite/models.dart' as models;
+import 'package:hawkbee_schema/hawkbee_schema.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -130,11 +131,11 @@ void main() {
   });
 
   group(AppwriteAdmins, () {
-    test('decision 161 an admin has the label admin', () async {
+    test('decision 161 an admin has the admin label', () async {
       final users = _MockUsers();
       final admin = _MockUser();
       final player = _MockUser();
-      when(() => admin.labels).thenReturn(['admin']);
+      when(() => admin.labels).thenReturn([AppwriteIds.adminLabel]);
       when(() => player.labels).thenReturn(['beta']);
       when(() => users.get(userId: 'a')).thenAnswer((_) async => admin);
       when(() => users.get(userId: 'p')).thenAnswer((_) async => player);
