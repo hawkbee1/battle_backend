@@ -1,10 +1,12 @@
 /// The logic of the Battle Team functions around battles (stack decision
-/// 8): wars, battles, sections, guilds and API keys, over the tables of the
-/// Hawkbee database, with their Appwrite adapters.
+/// 8): wars, battles, sections, guilds, API keys and where each battle's
+/// host is, over the tables of the Hawkbee database, with their Appwrite
+/// adapters.
 library;
 
 export 'src/api_keys.dart';
 export 'src/appwrite_rows.dart';
+export 'src/battle_hosts.dart';
 export 'src/function_kit.dart';
 export 'src/guilds.dart';
 export 'src/refused.dart';
