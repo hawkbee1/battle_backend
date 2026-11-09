@@ -78,7 +78,7 @@ final class AppwriteRows implements Rows {
 
 /// {@template admins}
 /// Who is an admin (stack decision 6): an account with the Appwrite label
-/// `admin`, checked on the server.
+/// [AppwriteIds.adminLabel], checked on the server.
 /// {@endtemplate}
 abstract interface class Admins {
   /// Whether [accountId] is an admin.
