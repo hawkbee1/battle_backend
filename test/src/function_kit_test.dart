@@ -29,6 +29,25 @@ void main() {
       expect(integerOf(null, 'seed'), isNull);
     });
 
+    test('reads an object field of a body, empty when there is none', () {
+      expect(
+        objectOf({
+          'settings': {'test_units': true},
+        }, 'settings'),
+        {'test_units': true},
+      );
+      expect(objectOf({'warId': 'w'}, 'settings'), isEmpty);
+      expect(objectOf(null, 'settings'), isEmpty);
+      expect(
+        () => objectOf({'settings': 'fast'}, 'settings'),
+        throwsA(
+          isA<Refused>()
+              .having((r) => r.code, 'code', 'bad_settings')
+              .having((r) => r.status, 'status', 400),
+        ),
+      );
+    });
+
     test('knows the caller from the header of a signed-in user', () {
       expect(callerOf({'x-appwrite-user-id': 'p-1'}), 'p-1');
       for (final headers in [
