@@ -36,6 +36,64 @@ void main() {
       );
     });
 
+    test('COMBAT-02 UNIT-44 plans a testing battle with its own settings, '
+        'and the others with none', () async {
+      await b.wars.create(caller: 'admin', warId: 'w-1');
+      await b.wars.plan(
+        caller: 'admin',
+        warId: 'w-1',
+        battleId: 'b-1',
+        mapId: 'valley',
+        seed: 3,
+        settings: {
+          'ap': {'recovery_delay_s': 1},
+          'test_units': true,
+        },
+      );
+      await b.wars.plan(
+        caller: 'admin',
+        warId: 'w-1',
+        battleId: 'b-2',
+        mapId: 'valley',
+        seed: 4,
+      );
+
+      expect((await b.wars.battle('b-1')).settings, {
+        'ap': {'recovery_delay_s': 1},
+        'test_units': true,
+      });
+      expect((await b.wars.battle('b-2')).settings, isEmpty);
+    });
+
+    test('refuses settings the plan would refuse (decision 238)', () async {
+      await b.wars.create(caller: 'admin', warId: 'w-1');
+
+      for (final settings in <Map<String, Object?>>[
+        {
+          'ap': {'recovery_delay_s': 0},
+        },
+        {'recovery_delay_s': 1},
+        {'test_units': 'yes'},
+      ]) {
+        expect(
+          () => b.wars.plan(
+            caller: 'admin',
+            warId: 'w-1',
+            battleId: 'b-1',
+            mapId: 'valley',
+            seed: 3,
+            settings: settings,
+          ),
+          throwsA(
+            isA<Refused>()
+                .having((r) => r.code, 'code', 'bad_settings')
+                .having((r) => r.status, 'status', 400),
+          ),
+        );
+      }
+      expect(await b.rows.get(AppwriteIds.battlesTableId, 'b-1'), isNull);
+    });
+
     test('plans battles in order and starts the next one', () async {
       await b.wars.create(caller: 'admin', warId: 'w-1');
       await b.wars.plan(

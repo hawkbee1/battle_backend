@@ -30,6 +30,15 @@ int? integerOf(Object? body, String key) => switch (_field(body, key)) {
   _ => null,
 };
 
+/// The object field [key] of [body], or an empty one when there is none.
+///
+/// Throws a [Refused] with 400 when the field is not an object.
+Json objectOf(Object? body, String key) => switch (_field(body, key)) {
+  null => const {},
+  final Json value => value,
+  _ => throw Refused('bad_$key', status: 400),
+};
+
 Object? _field(Object? body, String key) =>
     body is Map<String, Object?> ? body[key] : null;
 

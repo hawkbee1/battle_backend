@@ -184,16 +184,28 @@ final class Wars {
 
   /// [caller], an admin, plans the battle [battleId] of the war [warId] on
   /// [mapId], with the random of [seed], after the others (SOC-16).
+  ///
+  /// The battle plays with the plan's settings, except those [settings]
+  /// override, in the shape of `battle.yaml` (decisions 172, 238): a testing
+  /// battle sets `{'ap': {'recovery_delay_s': 1}, 'test_units': true}`.
+  /// They are checked here, so a battle never starts with settings its host
+  /// would refuse.
   Future<BattleRow> plan({
     required String caller,
     required String warId,
     required String battleId,
     required String mapId,
     required int seed,
+    Map<String, Object?> settings = const {},
   }) async {
     await _admin(caller);
     if (await rows.get(AppwriteIds.battlesTableId, battleId) != null) {
       throw const Refused('battle_exists');
+    }
+    try {
+      data.settingsWith(settings);
+    } on GameDataException {
+      throw const Refused('bad_settings', status: 400);
     }
     final planned = _changed(_rules(await war(warId)).plan(battleId));
     final battle = BattleRow(
@@ -201,6 +213,7 @@ final class Wars {
       warId: warId,
       mapId: mapId,
       seed: seed,
+      settings: settings,
     );
     await rows.put(AppwriteIds.battlesTableId, battleId, battle.toData());
     await _putWar(planned);
