@@ -103,7 +103,10 @@ final class Wars {
     sectionXp: section.kept.xp,
     units: [
       for (final unit in section.kept.units)
-        UnitXp(earned: unit.xpEarned, unspent: unit.xpUnspent),
+        (
+          type: data.units.unitTypes[unit.type]!,
+          xp: UnitXp(earned: unit.xpEarned, unspent: unit.xpUnspent),
+        ),
     ],
   );
 
