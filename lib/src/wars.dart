@@ -128,7 +128,7 @@ final class Wars {
 
   /// [caller], a player, joins the war [warId] with a new section: the
   /// war's starting money and a commander (SOC-15, SOC-30). During a
-  /// battle, the section joins its weakest team, a tie drawn with a random
+  /// battle, the section joins the team with the lowest power per section, a tie drawn with a random
   /// of the battle's seed (SOC-02, decision 211).
   Future<SectionRow> join({
     required String caller,
@@ -162,6 +162,10 @@ final class Wars {
       };
       final team = _teams.newcomerTeam(
         powers,
+        {
+          for (final MapEntry(key: team, value: ids) in running.teams.entries)
+            team: ids.length,
+        },
         XorshiftRandom(
           running.seed + running.teams.values.expand((t) => t).length,
         ),

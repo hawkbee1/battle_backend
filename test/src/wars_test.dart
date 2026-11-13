@@ -216,6 +216,26 @@ void main() {
         'team-2': [late],
       });
     });
+
+    test('SOC-02 newcomers with no XP spread over the teams', () async {
+      final first = await join('p-1');
+      await b.wars.plan(
+        caller: 'admin',
+        warId: 'w-1',
+        battleId: 'b-1',
+        mapId: 'valley',
+        seed: 3,
+      );
+      await b.wars.start(caller: 'admin', battleId: 'b-1');
+
+      final late = [for (var i = 2; i <= 5; i++) await join('p-$i')];
+
+      final teams = (await b.wars.battle('b-1')).teams;
+      expect(teams['team-1']!.length, inInclusiveRange(2, 3));
+      expect(teams['team-2']!.length, inInclusiveRange(2, 3));
+      expect([...teams['team-1']!, ...teams['team-2']!], hasLength(5));
+      expect(late, everyElement(isNotEmpty));
+    });
   });
 
   group('UNIT-30 SOC-17 the end of a battle', () {
